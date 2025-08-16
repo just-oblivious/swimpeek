@@ -1,0 +1,60 @@
+# LanePeek for Swimlane Turbine
+
+LanePeek "connects the dots" between playbooks, components, applications, and other related resources  in Swimlane Turbine.
+
+With LanePeek you can browse relationships between resources and answer questions like:
+- What playbooks are triggered when a record is created in this application?
+- What playbook-actions modify records in this application?
+- What workflows listen for (or emit) this flow event?
+
+*This tool works by requesting configuration data from a Swimlane Turbine tenant and turning it into a graph-like data structure, this graph can then be navigated in a [fancy terminal UI](https://charm.land/).*
+
+
+## Limitations
+
+- Only Turbine content is supported, legacy content is ignored;
+- Laneview was developed with Turbine v25.2.1 in mind, there's no guarantee that this tool keeps working for newer releases;
+- This tool was created by ~~reading the tea leaves~~ analyzing API responses, the output may not be 100% accurate.
+
+
+## Installation & configuration
+
+1.  Download and install Go (>=1.24.1) from https://go.dev/dl/
+
+1.  Run Go install to install Swimpeek:
+    ```sh
+    go install github.com/just-oblivious/lanepeek@latest
+    ```
+
+1. Create a Personal Access Token for your Swimlane account ([docs](https://docs.swimlane.com/docs/introduction/customize-your-user-profile.htm))
+
+1.  Configure Swimpeek:
+    ```sh
+    swimpeek config
+    ```
+
+*Command not found?
+Add the following line to your shell config to ensure that the Go bin directory is included in the system path:*
+  ```sh
+  export PATH=${PATH}:`go env GOPATH`/bin
+  ```
+
+
+## Usage
+
+1.  Download the contents of a Swimlane tenant to a JSON-file:
+    ```sh
+    swimpeek dump
+    ```
+
+1.  Launch the analyzer:
+    ```sh
+    swimpeek analyze -infile path_to_dump.json
+    ```
+
+Run `swimpeek cmd -help` to learn more about the usage of each subcommand
+
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
