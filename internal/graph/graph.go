@@ -29,7 +29,20 @@ type Meta struct {
 	Description string
 }
 
-// NewGraph creates a new graph.
+// FromState creates a graph from a given LaneState.
+func FromState(laneState *lanedump.LaneState) (*Graph, []error, error) {
+
+	// Create nodes for top-level resources.
+	resources := createNodes(laneState)
+	g := newGraph(resources)
+
+	// Run the linker to create edges between nodes.
+	warns, err := linkGraph(g, laneState)
+
+	return g, warns, err
+}
+
+// newGraph creates a new graph.
 func newGraph(res *ResourceNodes) *Graph {
 	g := &Graph{
 		Resources: res,
@@ -37,7 +50,7 @@ func newGraph(res *ResourceNodes) *Graph {
 	return g
 }
 
-// NewNode creates a new node with the given metadata.
+// newNode creates a new node with the given metadata.
 func newNode(meta Meta) *Node {
 	return &Node{
 		Meta: meta,
@@ -46,7 +59,7 @@ func newNode(meta Meta) *Node {
 	}
 }
 
-// NewEdge creates a new edge between two nodes and adds it to their edges list.
+// newEdge creates a new edge between two nodes and adds it to their edges list.
 func newEdge(src *Node, dst *Node, edgeType EdgeType, meta *Meta) *Edge {
 	edge := &Edge{
 		Src:  src,
@@ -69,19 +82,6 @@ func newMeta(id string, typ NodeType, label string, description string) Meta {
 		Label:       label,
 		Description: description,
 	}
-}
-
-// FromState creates a graph from a given LaneState.
-func FromState(laneState *lanedump.LaneState) (*Graph, []error, error) {
-
-	// Create nodes for top-level resources.
-	resources := createNodes(laneState)
-	g := newGraph(resources)
-
-	// Run the linker to create edges between nodes.
-	warns, err := linkGraph(g, laneState)
-
-	return g, warns, err
 }
 
 type WalkFn func(n *Node, e *Edge, curDepth int) error
