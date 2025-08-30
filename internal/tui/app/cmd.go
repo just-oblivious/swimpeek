@@ -1,0 +1,86 @@
+package app
+
+import (
+	"swimpeek/internal/graph"
+
+	tea "github.com/charmbracelet/bubbletea"
+)
+
+type NavDirection int
+
+const (
+	NavUp NavDirection = iota
+	NavDown
+	NavNextTab
+	NavPrevTab
+	NavPageUp
+	NavPageDown
+	NavHome
+	NavEnd
+	NavRight
+	NavLeft
+	NavSelect
+)
+
+type NavCmd struct {
+	NavEvent NavDirection
+}
+
+func NavCmdUp() tea.Msg {
+	return NavCmd{NavEvent: NavUp}
+}
+func NavCmdDown() tea.Msg {
+	return NavCmd{NavEvent: NavDown}
+}
+func NavCmdNextTab() tea.Msg {
+	return NavCmd{NavEvent: NavNextTab}
+}
+func NavCmdPrevTab() tea.Msg {
+	return NavCmd{NavEvent: NavPrevTab}
+}
+func NavCmdPageUp() tea.Msg {
+	return NavCmd{NavEvent: NavPageUp}
+}
+func NavCmdPageDown() tea.Msg {
+	return NavCmd{NavEvent: NavPageDown}
+}
+func NavCmdHome() tea.Msg {
+	return NavCmd{NavEvent: NavHome}
+}
+func NavCmdEnd() tea.Msg {
+	return NavCmd{NavEvent: NavEnd}
+}
+func NavCmdRight() tea.Msg {
+	return NavCmd{NavEvent: NavRight}
+}
+func NavCmdLeft() tea.Msg {
+	return NavCmd{NavEvent: NavLeft}
+}
+func NavCmdSelect() tea.Msg {
+	return NavCmd{NavEvent: NavSelect}
+}
+
+type FocusCmd struct {
+	Focus bool
+}
+
+func CmdFocus() tea.Msg {
+	return FocusCmd{Focus: true}
+}
+func CmdUnfocus() tea.Msg {
+	return FocusCmd{Focus: false}
+}
+
+type CancelNavCmd struct{}
+
+func CmdCancelNav() tea.Msg {
+	return CancelNavCmd{}
+}
+
+type ShowFlowCmd struct {
+	Node *graph.Node
+}
+
+func CmdSwitchView(node *graph.Node) tea.Msg {
+	return ShowFlowCmd{Node: node}
+}
