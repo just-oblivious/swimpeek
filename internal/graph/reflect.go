@@ -56,20 +56,3 @@ func reflectRecordActionAppId(inputs any) (string, error) {
 	}
 	return "", fmt.Errorf("invalid record action inputs: %v", inputs)
 }
-
-// reflectRecordActionType determines the type of record action based on its inputs.
-func reflectRecordActionType(inputs any) (NodeType, error) {
-	cfg, ok := inputs.(map[string]any)
-	if ok {
-		if _, hasPatchValues := cfg["patchValues"]; hasPatchValues {
-			return RecordUpdateActionNode, nil
-		}
-		if _, hasFields := cfg["fields"]; hasFields {
-			return RecordCreateActionNode, nil
-		}
-		if _, hasFilter := cfg["filters"]; hasFilter {
-			return RecordSearchActionNode, nil
-		}
-	}
-	return "", fmt.Errorf("invalid record action inputs: %v", inputs)
-}

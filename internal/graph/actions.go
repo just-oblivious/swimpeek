@@ -98,10 +98,20 @@ func createActionNode(warns *Warnings, graph *Graph, action laneclient.PlaybookA
 
 	case "recordAction":
 		// Determine the subtype of the record action (create, update, or search)
-		recordActionType, err := reflectRecordActionType(action.Inputs)
-		if err != nil {
-			warns.Add(fmt.Errorf("recordAction %s unable to determine subtype: %w", actId, err))
-			recordActionType = RecordActionNode
+		recordActionType := RecordActionNode
+		switch action.RecordActionType {
+		case "create":
+			recordActionType = RecordCreateActionNode
+		case "patch":
+			recordActionType = RecordUpdateActionNode
+		case "search":
+			recordActionType = RecordSearchActionNode
+		case "delete":
+			recordActionType = RecordDeleteActionNode
+		case "upsert":
+			recordActionType = RecordUpsertActionNode
+		default:
+			warns.Add(fmt.Errorf("recordAction %s has unknown recordActionType %s", actId, action.RecordActionType))
 		}
 
 		recNode := newNode(newMeta(actId, recordActionType, action.Title, action.Description))
