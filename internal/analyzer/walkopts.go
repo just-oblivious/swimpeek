@@ -12,7 +12,7 @@ const (
 	Ascend
 )
 
-type walkOpts struct {
+type WalkOpts struct {
 	direction       WalkDirection
 	followNodeTypes []graph.NodeType
 	skipNodeTypes   []graph.NodeType
@@ -22,8 +22,8 @@ type walkOpts struct {
 	maxDepth        int
 }
 
-func NewWalkOpts(direction WalkDirection, options ...func(*walkOpts)) walkOpts {
-	opts := walkOpts{
+func NewWalkOpts(direction WalkDirection, options ...func(*WalkOpts)) WalkOpts {
+	opts := WalkOpts{
 		direction: direction,
 	}
 	for _, option := range options {
@@ -32,44 +32,58 @@ func NewWalkOpts(direction WalkDirection, options ...func(*walkOpts)) walkOpts {
 	return opts
 }
 
-func WithFollowNodeTypes(types ...graph.NodeType) func(*walkOpts) {
-	return func(opts *walkOpts) {
+func WithFollowNodeTypes(types ...graph.NodeType) func(*WalkOpts) {
+	return func(opts *WalkOpts) {
 		opts.followNodeTypes = append(opts.followNodeTypes, types...)
 	}
 }
 
-func WithSkipNodeTypes(types ...graph.NodeType) func(*walkOpts) {
-	return func(opts *walkOpts) {
+func WithSkipNodeTypes(types ...graph.NodeType) func(*WalkOpts) {
+	return func(opts *WalkOpts) {
 		opts.skipNodeTypes = append(opts.skipNodeTypes, types...)
 	}
 }
 
-func WithFollowEdgeTypes(types ...graph.EdgeType) func(*walkOpts) {
-	return func(opts *walkOpts) {
+func WithFollowEdgeTypes(types ...graph.EdgeType) func(*WalkOpts) {
+	return func(opts *WalkOpts) {
 		opts.followEdgeTypes = append(opts.followEdgeTypes, types...)
 	}
 }
 
-func WithSkipEdgeTypes(types ...graph.EdgeType) func(*walkOpts) {
-	return func(opts *walkOpts) {
+func WithSkipEdgeTypes(types ...graph.EdgeType) func(*WalkOpts) {
+	return func(opts *WalkOpts) {
 		opts.skipEdgeTypes = append(opts.skipEdgeTypes, types...)
 	}
 }
 
-func WithSkipNodes(nodes ...*graph.Node) func(*walkOpts) {
-	return func(opts *walkOpts) {
+func WithSkipNodes(nodes ...*graph.Node) func(*WalkOpts) {
+	return func(opts *WalkOpts) {
 		opts.skipNodes = append(opts.skipNodes, nodes...)
 	}
 }
 
-func WithMaxDepth(depth int) func(*walkOpts) {
-	return func(opts *walkOpts) {
+func WithMaxDepth(depth int) func(*WalkOpts) {
+	return func(opts *WalkOpts) {
 		opts.maxDepth = depth
 	}
 }
 
+// Next returns a slice of maps representing the next edges and nodes matching the filtering criteria.
+func (t WalkOpts) Next(node *graph.Node) []map[*graph.Edge]*graph.Node {
+	edges := t.filterEdges(t.nextEdges(node))
+	next := make([]map[*graph.Edge]*graph.Node, 0, len(edges))
+
+	for _, edge := range edges {
+		nextNode := t.nextNode(edge)
+		if t.shouldFollow(nextNode) {
+			next = append(next, map[*graph.Edge]*graph.Node{edge: nextNode})
+		}
+	}
+	return next
+}
+
 // nextEdges returns the next edges to traverse based on the trace direction.
-func (t walkOpts) nextEdges(node *graph.Node) []*graph.Edge {
+func (t WalkOpts) nextEdges(node *graph.Node) []*graph.Edge {
 	if t.direction == Descend {
 		return node.Out
 	}
@@ -77,7 +91,7 @@ func (t walkOpts) nextEdges(node *graph.Node) []*graph.Edge {
 }
 
 // nextNode returns the next node to traverse based on the trace direction.
-func (t walkOpts) nextNode(edge *graph.Edge) *graph.Node {
+func (t WalkOpts) nextNode(edge *graph.Edge) *graph.Node {
 	if t.direction == Descend {
 		return edge.Dst
 	}
@@ -85,7 +99,7 @@ func (t walkOpts) nextNode(edge *graph.Edge) *graph.Node {
 }
 
 // shouldFollow checks if a node should be followed based on the trace options.
-func (t walkOpts) shouldFollow(node *graph.Node) bool {
+func (t WalkOpts) shouldFollow(node *graph.Node) bool {
 	if slices.Contains(t.skipNodes, node) {
 		return false
 	}
@@ -99,7 +113,7 @@ func (t walkOpts) shouldFollow(node *graph.Node) bool {
 }
 
 // filterEdges filters edges based on types to skip or follow.
-func (t walkOpts) filterEdges(edges []*graph.Edge) []*graph.Edge {
+func (t WalkOpts) filterEdges(edges []*graph.Edge) []*graph.Edge {
 	if len(t.skipEdgeTypes) == 0 && len(t.followEdgeTypes) == 0 {
 		return edges
 	}
@@ -116,6 +130,6 @@ func (t walkOpts) filterEdges(edges []*graph.Edge) []*graph.Edge {
 	return filtered
 }
 
-func (t walkOpts) maxDepthReached(currentDepth int) bool {
+func (t WalkOpts) maxDepthReached(currentDepth int) bool {
 	return t.maxDepth > 0 && currentDepth >= t.maxDepth
 }

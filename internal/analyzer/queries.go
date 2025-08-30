@@ -35,7 +35,14 @@ func (a *Analyzer) GetTriggersForWorkflow(wfNode *graph.Node) map[*graph.Node]bo
 	return a.FindUnique(wfNode, NewWalkOpts(Ascend, WithFollowEdgeTypes(graph.TriggersWorkflowEdge), WithMaxDepth(1)))
 }
 
-// GetReferences returns nodes that reference the given node.
+// GetReferences returns all nodes that reference the given node.
 func (a *Analyzer) GetReferences(node *graph.Node) map[*graph.Node]bool {
-	return a.FindUnique(node, NewWalkOpts(Ascend))
+	refEdges := []graph.EdgeType{
+		graph.AccessedByEdge,
+		graph.HasActionEdge,
+		graph.CalledByEdge,
+		graph.EmittedByEdge,
+		graph.HasEventEdge,
+	}
+	return a.FindUnique(node, NewWalkOpts(Ascend, WithMaxDepth(1), WithFollowEdgeTypes(refEdges...)))
 }

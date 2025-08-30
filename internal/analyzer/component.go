@@ -30,7 +30,7 @@ func (a *Analyzer) ComponentCalledBy(compNode *graph.Node) *ComponentCalledByRes
 		}
 	}
 
-	// Find workflows that belong to a component
+	// Find components and playbooks containing the workflows
 	calledByComponents := make(map[*graph.Node]bool)
 	calledByPbWorkflows := make(map[*graph.Node]map[*graph.Node]bool)
 	for wfNode := range calledByWorkflows {

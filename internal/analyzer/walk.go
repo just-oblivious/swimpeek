@@ -11,21 +11,21 @@ type findResult struct {
 
 // FindAll finds all nodes reachable from the root node in the specified direction that match one of the nodeTypes.
 // This function preserves the order of discovery.
-func (a *Analyzer) FindAll(root *graph.Node, opts walkOpts, nodeTypes ...graph.NodeType) []*graph.Node {
+func (a *Analyzer) FindAll(root *graph.Node, opts WalkOpts, nodeTypes ...graph.NodeType) []*graph.Node {
 	result := findResult{}
 	findFn(root, false, 0, &result, opts, nodeTypes...)
 	return result.nodes
 }
 
 // FindUnique finds all unique nodes reachable from the root node in the specified direction that match one of the nodeTypes.
-func (a *Analyzer) FindUnique(root *graph.Node, opts walkOpts, nodeTypes ...graph.NodeType) map[*graph.Node]bool {
+func (a *Analyzer) FindUnique(root *graph.Node, opts WalkOpts, nodeTypes ...graph.NodeType) map[*graph.Node]bool {
 	result := findResult{}
 	findFn(root, false, 0, &result, opts, nodeTypes...)
 	return toSet(result.nodes)
 }
 
 // FindFirst finds the first node reachable from the root node in the specified direction that match one of the nodeTypes.
-func (a *Analyzer) FindFirst(root *graph.Node, opts walkOpts, nodeTypes ...graph.NodeType) *graph.Node {
+func (a *Analyzer) FindFirst(root *graph.Node, opts WalkOpts, nodeTypes ...graph.NodeType) *graph.Node {
 	result := findResult{}
 	findFn(root, true, 0, &result, opts, nodeTypes...)
 	if len(result.nodes) == 0 {
@@ -35,7 +35,7 @@ func (a *Analyzer) FindFirst(root *graph.Node, opts walkOpts, nodeTypes ...graph
 }
 
 // findFn is a recursive function that performs the actual graph traversal based on the provided options.
-func findFn(node *graph.Node, returnFirstResult bool, curDepth int, result *findResult, opts walkOpts, nodeTypes ...graph.NodeType) {
+func findFn(node *graph.Node, returnFirstResult bool, curDepth int, result *findResult, opts WalkOpts, nodeTypes ...graph.NodeType) {
 	if opts.maxDepthReached(curDepth) {
 		return
 	}
