@@ -1,28 +1,26 @@
 package flowtree
 
 import (
-	"fmt"
 	"strings"
 	"swimpeek/internal/graph"
 	"swimpeek/internal/tui/app"
 	"swimpeek/internal/tui/styles"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
-type nodeModel struct {
+type flowNode struct {
 	node         *graph.Node
 	edge         *graph.Edge
-	branches     []tea.Model
-	innerActions []tea.Model
+	branches     []*flowNode
+	innerActions []*flowNode
 	references   map[*graph.Node]bool
 	hasFocus     bool
 	isExpanded   bool
 }
 
-func newActionNode(node *graph.Node, edge *graph.Edge, branches []tea.Model, innerActions []tea.Model, refs map[*graph.Node]bool, expanded bool) tea.Model {
-	return nodeModel{
+func newFlowNode(node *graph.Node, edge *graph.Edge, branches []*flowNode, innerActions []*flowNode, refs map[*graph.Node]bool, expanded bool) *flowNode {
+	return &flowNode{
 		node:         node,
 		edge:         edge,
 		branches:     branches,
@@ -33,19 +31,15 @@ func newActionNode(node *graph.Node, edge *graph.Edge, branches []tea.Model, inn
 	}
 }
 
-func (m nodeModel) Init() tea.Cmd {
-	return nil
+func (m *flowNode) setFocus(focussed bool) {
+	m.hasFocus = focussed
 }
 
-func (m nodeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case app.FocusCmd:
-		m.hasFocus = msg.Focus
-	}
-	return m, nil
+func (m *flowNode) setExpand(expanded bool) {
+	m.isExpanded = expanded
 }
 
-func (m nodeModel) View() string {
+func (m *flowNode) render() string {
 	icon, ok := app.NodeIcons[m.node.Meta.Type]
 	if !ok {
 		icon = "●"
@@ -58,10 +52,10 @@ func (m nodeModel) View() string {
 	innerActions := make([]string, 0, len(m.innerActions))
 	if m.isExpanded {
 		for _, ia := range m.innerActions {
-			innerActions = append(innerActions, ia.View())
+			innerActions = append(innerActions, ia.render())
 		}
 	} else if len(m.innerActions) > 0 {
-		innerActions = append(innerActions, styles.ResDescriptionStyle.Render(fmt.Sprintf("■ %d inner actions...", len(m.innerActions))))
+		innerActions = append(innerActions, styles.ResDescriptionStyle.Render("■➜ expand..."))
 	}
 	innerActionsBlock := lipgloss.JoinVertical(lipgloss.Left, innerActions...)
 
@@ -73,7 +67,7 @@ func (m nodeModel) View() string {
 	// Render branches
 	branches := make([]string, 0, len(m.branches))
 	for _, b := range m.branches {
-		branches = append(branches, b.View())
+		branches = append(branches, b.render())
 	}
 
 	branchBlock := lipgloss.JoinVertical(lipgloss.Left, branches...)
@@ -88,10 +82,11 @@ func (m nodeModel) View() string {
 	}
 	actionBlocks := lipgloss.JoinVertical(lipgloss.Left, blocks...)
 
-	return lipgloss.JoinVertical(lipgloss.Left, label, lipgloss.JoinHorizontal(lipgloss.Left, branchLines, actionBlocks))
+	renderedAction := lipgloss.JoinVertical(lipgloss.Left, label, lipgloss.JoinHorizontal(lipgloss.Left, branchLines, actionBlocks))
+	return renderedAction
 }
 
-func (m nodeModel) renderEdge(icon string) string {
+func (m flowNode) renderEdge(icon string) string {
 	if m.edge == nil {
 		return icon + " "
 	}
@@ -100,7 +95,7 @@ func (m nodeModel) renderEdge(icon string) string {
 	switch m.edge.Type {
 	case graph.OnSuccessEdge, graph.IfEdge:
 		color = styles.SuccessColor
-	case graph.OnFailureEdge, graph.ElseEdge:
+	case graph.OnFailureEdge, graph.ElseEdge, graph.UnreachableEdge:
 		color = styles.FailureColor
 	case graph.EntrypointEdge:
 		return icon + "➜ "
@@ -115,18 +110,21 @@ func (m nodeModel) renderEdge(icon string) string {
 	return style.Render(icon + " " + label + " ")
 }
 
-func (m nodeModel) renderNodeLabel() string {
+func (m flowNode) renderNodeLabel() string {
 	label, ok := app.NodeLabels[m.node.Meta.Type]
 	if !ok {
 		label = string(m.node.Meta.Type)
 	}
 	typeLabel := styles.ResTypeLabelStyle.Render("⟨" + label + "⟩")
-	style := lipgloss.NewStyle().Bold(m.hasFocus)
+	style := lipgloss.NewStyle()
+	if m.hasFocus {
+		style = style.Foreground(styles.FlowNodeHighlightColor).Bold(true)
+	}
 
-	return style.Render(typeLabel + " " + m.node.Meta.Label)
+	return typeLabel + " " + style.Render(m.node.Meta.Label)
 }
 
-func (m nodeModel) renderReferences() string {
+func (m flowNode) renderReferences() string {
 	if len(m.references) == 0 {
 		return ""
 	}
@@ -141,11 +139,11 @@ func (m nodeModel) renderReferences() string {
 	return styles.ResReferenceStyle.Render(lipgloss.JoinHorizontal(lipgloss.Left, " ➜ ", strings.Join(refs, " · ")))
 }
 
-func (m nodeModel) renderLineSegments(blocks []string, offset int) string {
+func (m flowNode) renderLineSegments(blocks []string, offset int) string {
 	border := lipgloss.RoundedBorder()
 	color := styles.FlowLineSegmentColor
 	if m.hasFocus {
-		color = styles.FlowLineSegmentColor
+		color = styles.FlowLineSegmentFocussedColor
 	}
 	lineSegments := make([]string, 0, len(blocks)+offset)
 	for range offset {
