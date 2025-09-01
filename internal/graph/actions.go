@@ -204,15 +204,14 @@ func linkActions(warns *Warnings, graph *Graph, source *Node, actions map[string
 		}
 		linkFn(IfEdge, condition.Action)
 
-		// Remove duplicate references (conditionals sometimes duplicate the next action in the on-success step)
-		fltr := func(a map[string]any) bool {
-			_, ok := a[condition.Action]
-			return ok
-		}
-		action.OnSuccess = slices.DeleteFunc(action.OnSuccess, fltr)
+		// Remove duplicate references: conditionals may duplicate the "if" action in the "on-success" step
+		action.OnSuccess = slices.DeleteFunc(action.OnSuccess, func(a map[string]any) bool { _, ok := a[condition.Action]; return ok })
 	}
 	if action.Else != "" {
 		linkFn(ElseEdge, action.Else)
+
+		// Remove duplicate references: conditionals may duplicate the "else" action in the "on-success" step)
+		action.OnSuccess = slices.DeleteFunc(action.OnSuccess, func(a map[string]any) bool { _, ok := a[action.Else]; return ok })
 	}
 
 	// Loop actions and parallels: link the inner action chain
