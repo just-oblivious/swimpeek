@@ -29,8 +29,10 @@ func HelpStyles() help.Styles {
 
 // Window styles
 var (
-	WindowStyle   = lipgloss.NewStyle().Padding(0, 2)
-	ErrorBoxStyle = lipgloss.NewStyle().Padding(0, 2).Border(lipgloss.RoundedBorder()).BorderForeground(ErrorColor)
+	WindowStyle    = lipgloss.NewStyle().Padding(0, 2)
+	ErrorBoxStyle  = lipgloss.NewStyle().Padding(0, 2).Border(lipgloss.RoundedBorder()).BorderForeground(ErrorColor)
+	ScrollBarStyle = lipgloss.NewStyle().Foreground(ScrollBarColor)
+	ModeBlockStyle = lipgloss.NewStyle().Padding(0, 1).Background(FrameColor).Bold(true)
 )
 
 // Resource styles

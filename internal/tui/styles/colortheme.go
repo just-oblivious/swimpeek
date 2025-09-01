@@ -28,6 +28,9 @@ var (
 	FailureColor = lipgloss.AdaptiveColor{Light: "#FF0000", Dark: "#ff6200"}
 
 	FlowLineSegmentColor         = lipgloss.AdaptiveColor{Light: "#6C757D", Dark: "#ADB5BD"}
-	FlowLineSegmentFocussedColor = lipgloss.AdaptiveColor{Light: "#0400ff", Dark: "#00ffee"}
-	TypeLabelColor               = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#f456d4"}
+	FlowLineSegmentFocussedColor = lipgloss.AdaptiveColor{Light: "#0400ff", Dark: "#ffff00"}
+	FlowNodeHighlightColor       = lipgloss.AdaptiveColor{Light: "#0400ff", Dark: "#ffff00"}
+	TypeLabelColor               = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#ff6ae1"}
+
+	ScrollBarColor = lipgloss.AdaptiveColor{Light: "#6C757D", Dark: "#626262"}
 )
