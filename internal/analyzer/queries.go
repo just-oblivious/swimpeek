@@ -35,6 +35,16 @@ func (a *Analyzer) GetTriggersForWorkflow(wfNode *graph.Node) map[*graph.Node]bo
 	return a.FindUnique(wfNode, NewWalkOpts(Ascend, WithFollowEdgeTypes(graph.TriggersWorkflowEdge), WithMaxDepth(1)))
 }
 
+// GetEntrypointsForWorkflow returns the entrypoints of a workflow node.
+func (a *Analyzer) GetEntrypointsForWorkflow(wfNode *graph.Node) map[*graph.Node]bool {
+	return a.FindUnique(wfNode, NewWalkOpts(Descend, WithFollowEdgeTypes(graph.EntrypointEdge), WithMaxDepth(1)))
+}
+
+// GetComponentForAction returns the component associated with the given action node
+func (a *Analyzer) GetComponentForAction(actionNode *graph.Node) *graph.Node {
+	return a.FindFirst(actionNode, NewWalkOpts(Ascend, WithFollowEdgeTypes(graph.CalledByEdge), WithMaxDepth(1)), graph.ComponentNode)
+}
+
 // GetReferences returns all nodes that reference the given node.
 func (a *Analyzer) GetReferences(node *graph.Node) map[*graph.Node]bool {
 	refEdges := []graph.EdgeType{

@@ -36,7 +36,7 @@ func (a *Analyzer) FindFirst(root *graph.Node, opts WalkOpts, nodeTypes ...graph
 
 // findFn is a recursive function that performs the actual graph traversal based on the provided options.
 func findFn(node *graph.Node, returnFirstResult bool, curDepth int, result *findResult, opts WalkOpts, nodeTypes ...graph.NodeType) {
-	if opts.maxDepthReached(curDepth) {
+	if opts.maxDepthReached(curDepth) || node == nil {
 		return
 	}
 	edges := opts.filterEdges(opts.nextEdges(node))
