@@ -3,21 +3,23 @@ package app
 import "github.com/charmbracelet/bubbles/key"
 
 type KeyMap struct {
-	Up       key.Binding
-	Down     key.Binding
-	PageUp   key.Binding
-	PageDown key.Binding
-	NextTab  key.Binding
-	PrevTab  key.Binding
-	Quit     key.Binding
-	Back     key.Binding
-	Select   key.Binding
-	Filter   key.Binding
-	Home     key.Binding
-	End      key.Binding
-	Help     key.Binding
-	Expand   key.Binding
-	Collapse key.Binding
+	Up          key.Binding
+	Down        key.Binding
+	PageUp      key.Binding
+	PageDown    key.Binding
+	NextTab     key.Binding
+	PrevTab     key.Binding
+	Quit        key.Binding
+	Back        key.Binding
+	Select      key.Binding
+	Filter      key.Binding
+	Home        key.Binding
+	End         key.Binding
+	Help        key.Binding
+	Expand      key.Binding
+	Collapse    key.Binding
+	ExpandAll   key.Binding
+	CollapseAll key.Binding
 }
 
 func (k KeyMap) ShortHelp() []key.Binding {
@@ -26,9 +28,9 @@ func (k KeyMap) ShortHelp() []key.Binding {
 
 func (k KeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Up, k.Down, k.Expand, k.Collapse},
-		{k.NextTab, k.PrevTab, k.Back},
-		{k.Select, k.Filter, k.Quit, k.Help},
+		{k.Up, k.Down, k.NextTab, k.PrevTab},
+		{k.Expand, k.Collapse, k.ExpandAll, k.CollapseAll},
+		{k.Back, k.Filter, k.Quit, k.Help},
 	}
 }
 
@@ -92,5 +94,13 @@ var Keys = KeyMap{
 	Collapse: key.NewBinding(
 		key.WithKeys("left", "h"),
 		key.WithHelp("←", "collapse node"),
+	),
+	ExpandAll: key.NewBinding(
+		key.WithKeys("X"),
+		key.WithHelp("X", "expand all nodes"),
+	),
+	CollapseAll: key.NewBinding(
+		key.WithKeys("Z"),
+		key.WithHelp("Z", "collapse all nodes"),
 	),
 }

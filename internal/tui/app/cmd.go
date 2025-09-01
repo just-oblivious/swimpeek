@@ -20,6 +20,8 @@ const (
 	NavRight
 	NavLeft
 	NavSelect
+	NavExpandAll
+	NavCollapseAll
 )
 
 type NavCmd struct {
@@ -59,6 +61,12 @@ func NavCmdLeft() tea.Msg {
 func NavCmdSelect() tea.Msg {
 	return NavCmd{NavEvent: NavSelect}
 }
+func NavCmdExpandAll() tea.Msg {
+	return NavCmd{NavEvent: NavExpandAll}
+}
+func NavCmdCollapseAll() tea.Msg {
+	return NavCmd{NavEvent: NavCollapseAll}
+}
 
 type FocusCmd struct {
 	Focus bool
@@ -78,9 +86,10 @@ func CmdCancelNav() tea.Msg {
 }
 
 type ShowFlowCmd struct {
-	Node *graph.Node
+	Node        *graph.Node
+	Breadcrumbs []*graph.Node
 }
 
-func CmdSwitchView(node *graph.Node) tea.Msg {
-	return ShowFlowCmd{Node: node}
+func CmdShowFlow(node *graph.Node, breadcrumbs ...*graph.Node) tea.Msg {
+	return ShowFlowCmd{Node: node, Breadcrumbs: breadcrumbs}
 }
