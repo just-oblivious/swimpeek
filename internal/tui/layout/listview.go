@@ -77,7 +77,8 @@ func (m listView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m listView) View() string {
 	renderedItems := make([]string, len(m.items))
 	yOffset := 0
-	hWrapContainer := lipgloss.NewStyle().Width(m.listFrame.Width)
+	hWrapContainer := lipgloss.NewStyle().Width(m.listFrame.Width - 4)
+
 	for i, itm := range m.items {
 		itmView := hWrapContainer.Render(itm.View())
 		itmHeight := lipgloss.Height(itmView)
@@ -95,10 +96,12 @@ func (m listView) View() string {
 	content := lipgloss.JoinVertical(lipgloss.Left, renderedItems...)
 
 	m.viewport.SetContent(content)
-	m.viewport.Width = m.listFrame.Width
+	m.viewport.Width = m.listFrame.Width - 2
 	m.viewport.Height = m.listFrame.Height
 	m.viewport.SetYOffset(yOffset)
 
-	return m.viewport.View()
+	scrollBar := styles.RenderScrollBar(&m.viewport)
+
+	return lipgloss.JoinHorizontal(lipgloss.Left, scrollBar, " ", m.viewport.View())
 
 }
