@@ -86,6 +86,10 @@ func (m mainView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.updateContent(app.NavCmdLeft())
 		case key.Matches(msg, m.keys.Select):
 			return m.updateContent(app.NavCmdSelect())
+		case key.Matches(msg, m.keys.ExpandAll):
+			return m.updateContent(app.NavCmdExpandAll())
+		case key.Matches(msg, m.keys.CollapseAll):
+			return m.updateContent(app.NavCmdCollapseAll())
 
 		// Quit active content first before quitting the application, this avoids the user from accidentally quitting
 		// the app when they meant to go back to the previous view :)
@@ -104,7 +108,7 @@ func (m mainView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case app.ShowFlowCmd:
-		m.windowStack = append(m.windowStack, m.flowViews.ShowFlow(msg.Node))
+		m.windowStack = append(m.windowStack, m.flowViews.ShowFlow(msg.Node, msg.Breadcrumbs))
 		return m, nil
 	}
 
