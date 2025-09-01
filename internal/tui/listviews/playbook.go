@@ -55,8 +55,11 @@ func (m pbListItem) openWorkflow() tea.Msg {
 	if len(m.pbWorkflows) == 0 || m.selectedIdx < 0 || m.selectedIdx >= len(m.pbWorkflows) {
 		return nil
 	}
-	for wf := range m.pbWorkflows[m.selectedIdx] {
-		return app.CmdSwitchView(wf)
+	for wf, triggers := range m.pbWorkflows[m.selectedIdx] {
+		for _, trig := range triggers {
+			return app.CmdShowFlow(trig, m.playbook, wf)
+		}
+		return app.CmdShowFlow(wf, m.playbook, wf)
 	}
 	return nil
 }

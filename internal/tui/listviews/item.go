@@ -37,7 +37,7 @@ func (m simpleListItem) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case app.NavCmd:
 		switch msg.NavEvent {
 		case app.NavSelect:
-			return m, func() tea.Msg { return app.CmdSwitchView(m.resource) }
+			return m, func() tea.Msg { return app.CmdShowFlow(m.resource) }
 		}
 	}
 

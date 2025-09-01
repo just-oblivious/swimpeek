@@ -44,6 +44,14 @@ func (m *compListItem) collapse() {
 	m.isExpanded = false
 }
 
+func (m compListItem) openComponent() tea.Msg {
+	wf := m.analyzer.GetWorkflowForComponent(m.component)
+	for ep := range m.analyzer.GetEntrypointsForWorkflow(wf) {
+		return app.CmdShowFlow(ep, m.component)
+	}
+	return app.CmdShowFlow(wf, m.component)
+}
+
 func (m compListItem) Init() tea.Cmd {
 	return nil
 }
@@ -60,7 +68,7 @@ func (m compListItem) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case app.NavLeft:
 			m.collapse()
 		case app.NavSelect:
-			return m, func() tea.Msg { return app.CmdSwitchView(m.component) }
+			return m, m.openComponent
 		}
 	}
 
