@@ -66,7 +66,7 @@ func (m *flowTree) cursorStep(step int, applyToAll bool) {
 	}, m.flowNode)
 }
 
-func (m flowTree) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *flowTree) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case app.NavCmd:
 		if msg.NavEvent == app.NavNextTab {
