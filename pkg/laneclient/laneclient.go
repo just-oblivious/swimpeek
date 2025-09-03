@@ -32,8 +32,6 @@ type TenantClient struct {
 	Tenant Tenant
 }
 
-type Params *map[string]string
-
 // NewLaneClient returns a new API client.
 func NewLaneClient(domain string, accountId string, accessToken string, logger *log.Logger) LaneClient {
 	return LaneClient{
@@ -67,7 +65,7 @@ func (tc TenantClient) urlForTenantEndpoint(api string, endpoint string, apiVer 
 }
 
 // prepareRequest prepares a new http.request.
-func (lc LaneClient) prepareRequest(ctx context.Context, method string, url string, params Params, body io.Reader) (*http.Request, error) {
+func (lc LaneClient) prepareRequest(ctx context.Context, method string, url string, params map[string]string, body io.Reader) (*http.Request, error) {
 	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
@@ -80,10 +78,8 @@ func (lc LaneClient) prepareRequest(ctx context.Context, method string, url stri
 
 	// Add query parameters
 	q := req.URL.Query()
-	if params != nil {
-		for k, v := range *params {
-			q.Add(k, v)
-		}
+	for k, v := range params {
+		q.Add(k, v)
 	}
 	req.URL.RawQuery = q.Encode()
 
