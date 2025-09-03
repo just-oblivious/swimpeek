@@ -89,7 +89,9 @@ func cmdDump(args []string) {
 	flagSet := flag.NewFlagSet("dump", flag.ExitOnError)
 	flagSet.StringVar(&tenantId, "tenant", "", "Tenant ID to dump (if not specified, a picker dialog will be shown)")
 	flagSet.StringVar(&outfile, "outfile", "", "Output file for the dump (default: lanedump_{tenant}.json)")
-	flagSet.Parse(args)
+	if err := flagSet.Parse(args); err != nil {
+		logger.Fatal("Failed to parse flags", "error", err)
+	}
 
 	cfg := loadConfig(false)
 
@@ -131,7 +133,9 @@ func cmdAnalyze(args []string) {
 	infile := ""
 	flagSet := flag.NewFlagSet("analyze", flag.ExitOnError)
 	flagSet.StringVar(&infile, "infile", "", "Input file for the analysis")
-	flagSet.Parse(args)
+	if err := flagSet.Parse(args); err != nil {
+		logger.Fatal("Failed to parse flags", "error", err)
+	}
 
 	if infile == "" {
 		flagSet.Usage()
@@ -153,7 +157,9 @@ func cmdAnalyze(args []string) {
 	}
 
 	// Launch the resource browser
-	tui.LaunchExplorer(laneState, graph)
+	if err := tui.LaunchExplorer(laneState, graph); err != nil {
+		logger.Fatal("Failed to launch resource explorer", "error", err)
+	}
 }
 
 // loadConfig loads the SwimPeek configuration from the default location.
