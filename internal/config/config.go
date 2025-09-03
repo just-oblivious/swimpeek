@@ -69,7 +69,11 @@ func ReadConfig(cfgDir string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open config file: %s: %w", cfgPath, err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			panic(err)
+		}
+	}()
 
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(cfg); err != nil {
@@ -88,7 +92,11 @@ func SaveConfig(cfgDir string, cfg *Config) error {
 	if err != nil {
 		return fmt.Errorf("failed to create config file: %s: %w", cfgPath, err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			panic(err)
+		}
+	}()
 
 	// Encode the configuration to JSON and write it to the file
 	encoder := json.NewEncoder(file)

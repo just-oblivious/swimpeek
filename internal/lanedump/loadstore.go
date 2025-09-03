@@ -157,7 +157,11 @@ func WriteToDisk(laneState *LaneState, path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create file %s: %w", path, err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			panic(err)
+		}
+	}()
 
 	_, err = file.Write(json)
 	if err != nil {

@@ -216,7 +216,9 @@ func linkActions(warns *Warnings, graph *Graph, source *Node, actions map[string
 
 	// Loop actions and parallels: link the inner action chain
 	if len(action.Entrypoints) > 0 {
-		chainActions(warns, graph, source, action.Actions, action.Entrypoints...)
+		if err := chainActions(warns, graph, source, action.Actions, action.Entrypoints...); err != nil {
+			warns.Add(fmt.Errorf("failed to chain inner actions for %s: %w", source.Meta.Id, err))
+		}
 	}
 
 	// Traverse continuation flows (on-success, on-failure, on-complete))

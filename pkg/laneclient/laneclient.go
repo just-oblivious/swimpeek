@@ -97,7 +97,7 @@ func (lc LaneClient) sendRequest(req *http.Request) ([]byte, error) {
 	}
 
 	// Check response
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body: %w", err)

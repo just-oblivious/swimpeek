@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"fmt"
 	"swimpeek/internal/lanedump"
 )
 
@@ -82,25 +81,4 @@ func newMeta(id string, typ NodeType, label string, description string) Meta {
 		Label:       label,
 		Description: description,
 	}
-}
-
-type WalkFn func(n *Node, e *Edge, curDepth int) error
-
-// walkFn traverses the node and calls the provided function for each edge.
-func (n *Node) walkFn(fn WalkFn, curDepth int, maxDepth int) error {
-	if maxDepth > 0 && curDepth > maxDepth {
-		return fmt.Errorf("maximum depth %d exceeded", maxDepth)
-	}
-	for _, outEdge := range n.Out {
-		if err := fn(n, outEdge, curDepth); err != nil {
-			return err
-		}
-		outEdge.Dst.walkFn(fn, curDepth+1, maxDepth)
-	}
-	return nil
-}
-
-// Walk traverses the node and calls the provided function for each edge.
-func (n *Node) WalkFn(fn WalkFn, maxDepth int) error {
-	return n.walkFn(fn, 0, maxDepth)
 }
