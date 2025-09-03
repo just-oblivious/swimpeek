@@ -126,7 +126,6 @@ func (m compListItem) renderCallLocations() string {
 				pfx = "└─"
 			}
 			wfLabels = append(wfLabels, styles.ResReferenceStyle.Render(pfx+wf.Meta.Label))
-			wfIdx++
 		}
 
 		sfx := "\n"
