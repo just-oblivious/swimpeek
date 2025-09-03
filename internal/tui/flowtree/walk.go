@@ -19,13 +19,3 @@ func walkNodes(fn func(node *flowNode, idx int) bool, node *flowNode) {
 	}
 	walkFn(node)
 }
-
-// getVisibleNodeCount returns the number of nodes that are currently visible (expanded).
-func getVisibleNodeCount(node *flowNode) int {
-	count := 0
-	walkNodes(func(node *flowNode, idx int) bool {
-		count++
-		return node.isExpanded
-	}, node)
-	return count
-}

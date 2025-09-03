@@ -19,6 +19,7 @@ type flowNode struct {
 	isExpanded   bool
 }
 
+// newFlowNode creates a new flow node.
 func newFlowNode(node *graph.Node, edge *graph.Edge, branches []*flowNode, innerActions []*flowNode, refs map[*graph.Node]bool, expanded bool) *flowNode {
 	return &flowNode{
 		node:         node,
@@ -31,14 +32,29 @@ func newFlowNode(node *graph.Node, edge *graph.Edge, branches []*flowNode, inner
 	}
 }
 
+// setFocus sets the focus state of this node.
 func (m *flowNode) setFocus(focussed bool) {
 	m.hasFocus = focussed
 }
 
+// setExpand sets the expanded state of this node.
 func (m *flowNode) setExpand(expanded bool) {
 	m.isExpanded = expanded
 }
 
+// lineHeight returns the number of lines this node will occupy when rendered, including spacing.
+func (m flowNode) lineHeight() int {
+	lineHeight := 1 // Each node takes at least 1 line
+	if len(m.innerActions) > 0 && !m.isExpanded {
+		lineHeight += 1 // Collapsed nodes take 1 additional line to show the expansion hint
+	}
+	if len(m.branches) == 0 && len(m.innerActions) == 0 {
+		lineHeight += 1 // Leaf nodes at the end of a branch add 1 additional line for spacing
+	}
+	return lineHeight
+}
+
+// render renders the node and its children as a string.
 func (m *flowNode) render() string {
 	icon, ok := app.NodeIcons[m.node.Meta.Type]
 	if !ok {
@@ -86,6 +102,7 @@ func (m *flowNode) render() string {
 	return renderedAction
 }
 
+// renderEdge renders the edge leading to this node, if any.
 func (m flowNode) renderEdge(icon string) string {
 	if m.edge == nil {
 		return icon + " "
@@ -110,6 +127,7 @@ func (m flowNode) renderEdge(icon string) string {
 	return style.Render(icon + " " + label + " ")
 }
 
+// renderNodeLabel renders the node label with an icon, type, and focus styling.
 func (m flowNode) renderNodeLabel() string {
 	label, ok := app.NodeLabels[m.node.Meta.Type]
 	if !ok {
@@ -124,6 +142,7 @@ func (m flowNode) renderNodeLabel() string {
 	return typeLabel + " " + style.Render(m.node.Meta.Label)
 }
 
+// renderReferences renders the references associated with this node, if any.
 func (m flowNode) renderReferences() string {
 	if len(m.references) == 0 {
 		return ""
@@ -139,6 +158,7 @@ func (m flowNode) renderReferences() string {
 	return styles.ResReferenceStyle.Render(lipgloss.JoinHorizontal(lipgloss.Left, " ➜ ", strings.Join(refs, " · ")))
 }
 
+// renderLineSegments renders the vertical line segments connecting this node to its children.
 func (m flowNode) renderLineSegments(blocks []string, offset int) string {
 	border := lipgloss.RoundedBorder()
 	color := styles.FlowLineSegmentColor

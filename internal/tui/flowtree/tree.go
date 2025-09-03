@@ -20,22 +20,26 @@ type flowTree struct {
 	viewport     *viewport.Model
 	selectionIdx int
 	cursorMode   bool
-	visibleCount int
+	yOffsets     []int
+	visibleNodes []*flowNode
+	selectedNode *flowNode
 }
 
 // newFlowTree creates a new flow tree for the given root flow node.
 func newFlowTree(analyzer *analyzer.Analyzer, frame *app.Frame, flowNode *flowNode, breadcrumbs []*graph.Node, vp *viewport.Model) *flowTree {
 	flowNode.setFocus(true)
-	visible := getVisibleNodeCount(flowNode)
+	visible, yOffsets := getVisibleNodes(flowNode)
 	return &flowTree{
 		analyzer:     analyzer,
 		frame:        frame,
 		flowNode:     flowNode,
 		breadcrumbs:  breadcrumbs,
 		viewport:     vp,
-		selectionIdx: 0,
 		cursorMode:   true,
-		visibleCount: visible,
+		visibleNodes: visible,
+		yOffsets:     yOffsets,
+		selectedNode: flowNode,
+		selectionIdx: 0,
 	}
 }
 
@@ -43,27 +47,45 @@ func (m flowTree) Init() tea.Cmd {
 	return nil
 }
 
-// toggleExpand expands or collapses the currently selected node. If applyToAll is true, it applies the action to all nodes.
+// toggleExpand expands or collapses the currently selected node. If applyToAll is true, it applies the value to all visible nodes.
 func (m *flowTree) toggleExpand(state bool, applyToAll bool) {
-	walkNodes(func(node *flowNode, idx int) bool {
-		if idx == m.selectionIdx || applyToAll {
-			node.setExpand(state)
-			return applyToAll
-		}
-		return node.isExpanded
-	}, m.flowNode)
+	m.selectedNode.setExpand(state)
 
-	// recompute visible count after collapse/expand
-	m.visibleCount = getVisibleNodeCount(m.flowNode)
+	if applyToAll {
+		for _, node := range m.visibleNodes {
+			node.setExpand(state)
+		}
+	}
+
+	// recompute visible nodes after a collapse/expand event
+	m.visibleNodes, m.yOffsets = getVisibleNodes(m.flowNode)
 }
 
-// cursorStep moves the selection cursor up or down by the given step. If the step is 0 it just refreshes the focus state.
-func (m *flowTree) cursorStep(step int, applyToAll bool) {
-	m.selectionIdx = min(max(m.selectionIdx+step, 0), m.visibleCount-1)
-	walkNodes(func(node *flowNode, idx int) bool {
-		node.setFocus(idx == m.selectionIdx)
-		return node.isExpanded || applyToAll
-	}, m.flowNode)
+// cursorStep moves the selection cursor up or down by the given step and scrolls the viewport to keep the selection in view.
+// If the step is 0 it just resets the scroll position.
+func (m *flowTree) cursorStep(step int) {
+	m.selectionIdx = min(max(m.selectionIdx+step, 0), len(m.visibleNodes)-1)
+
+	toNode := m.visibleNodes[m.selectionIdx]
+	if toNode != m.selectedNode {
+		m.selectedNode.setFocus(false)
+		toNode.setFocus(true)
+		m.selectedNode = toNode
+	}
+
+	m.scrollToSelection(m.yOffsets[m.selectionIdx])
+}
+
+// scrollToSelection scrolls the viewport to ensure the selected node remains visible given its Y-offset in the rendered tree.
+func (m *flowTree) scrollToSelection(yOffset int) {
+	visibleCount := m.viewport.VisibleLineCount()
+	if m.viewport.TotalLineCount() <= visibleCount {
+		m.viewport.GotoTop()
+		return
+	}
+
+	// Bias the scroll position to show more context above the selection
+	m.viewport.SetYOffset(yOffset - (visibleCount - visibleCount/4))
 }
 
 func (m *flowTree) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -102,28 +124,29 @@ func (m *flowTree) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case app.NavNextTab:
 			m.cursorMode = !m.cursorMode
 		case app.NavPageUp:
-			m.cursorStep(-5, false)
+			m.cursorStep(-5)
 		case app.NavPageDown:
-			m.cursorStep(5, false)
+			m.cursorStep(5)
 		case app.NavUp:
-			m.cursorStep(-1, false)
+			m.cursorStep(-1)
 		case app.NavDown:
-			m.cursorStep(1, false)
+			m.cursorStep(1)
 		case app.NavHome:
 			m.selectionIdx = 0
-			m.cursorStep(0, false)
+			m.cursorStep(0)
 		case app.NavEnd:
-			m.selectionIdx = m.visibleCount - 1
-			m.cursorStep(0, false)
+			m.selectionIdx = len(m.visibleNodes) - 1
+			m.cursorStep(0)
 		case app.NavRight:
 			m.toggleExpand(true, false)
-		case app.NavLeft:
-			m.toggleExpand(false, false)
 		case app.NavExpandAll:
 			m.toggleExpand(true, true)
+			m.cursorStep(0)
+		case app.NavLeft:
+			m.toggleExpand(false, false)
 		case app.NavCollapseAll:
 			m.toggleExpand(false, true)
-			m.cursorStep(0, true) // reset focus to make sure we land on a visible node after collapsing all
+			m.cursorStep(0)
 		}
 	}
 
@@ -152,23 +175,43 @@ func (m flowTree) View() string {
 	return lipgloss.JoinVertical(lipgloss.Left, headerTitle, scrollPane)
 }
 
+// renderBreadcrumbs renders the breadcrumb trail for the current flow.
 func (m flowTree) renderBreadcrumbs() string {
-	bc := make([]string, len(m.breadcrumbs))
-	for i, b := range m.breadcrumbs {
-		label, ok := app.NodeLabels[b.Meta.Type]
+	crumbs := make([]string, len(m.breadcrumbs))
+
+	for idx, node := range m.breadcrumbs {
+		label, ok := app.NodeLabels[node.Meta.Type]
 		if !ok {
-			label = string(b.Meta.Type)
+			label = string(node.Meta.Type)
 		}
 
 		typeLabel := styles.ResTypeLabelStyle.Render("⟨" + label + "⟩")
 
-		icon, ok := app.NodeIcons[b.Meta.Type]
+		icon, ok := app.NodeIcons[node.Meta.Type]
 		if ok {
-			bc[i] = icon + " " + typeLabel + " " + b.Meta.Label
+			crumbs[idx] = icon + " " + typeLabel + " " + node.Meta.Label
 			continue
 		}
-		bc[i] = typeLabel + " " + b.Meta.Label
-
+		crumbs[idx] = typeLabel + " " + node.Meta.Label
 	}
-	return strings.Join(bc, " ➜ ")
+
+	return strings.Join(crumbs, " ➜ ")
+}
+
+// getVisibleNodes walks the nodes and returns a flat list of visible nodes and their Y-offsets.
+// The Y-offsets are the cumulative line heights of the nodes as they would be rendered.
+func getVisibleNodes(node *flowNode) ([]*flowNode, []int) {
+	visibleNodes := make([]*flowNode, 0, 100)
+	yOffsets := make([]int, 0, 100)
+	yOffset := 0
+
+	walkNodes(func(node *flowNode, idx int) bool {
+		visibleNodes = append(visibleNodes, node)
+		yOffset += node.lineHeight()
+		yOffsets = append(yOffsets, yOffset)
+
+		return node.isExpanded
+	}, node)
+
+	return visibleNodes, yOffsets
 }
