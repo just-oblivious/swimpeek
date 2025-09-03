@@ -210,7 +210,7 @@ func linkActions(warns *Warnings, graph *Graph, source *Node, actions map[string
 	if action.Else != "" {
 		linkFn(ElseEdge, action.Else)
 
-		// Remove duplicate references: conditionals may duplicate the "else" action in the "on-success" step)
+		// Remove duplicate references: conditionals may duplicate the "else" action in the "on-success" step
 		action.OnSuccess = slices.DeleteFunc(action.OnSuccess, func(a map[string]any) bool { _, ok := a[action.Else]; return ok })
 	}
 
