@@ -197,23 +197,6 @@ func linkActions(warns *Warnings, graph *Graph, source *Node, actions map[string
 
 	}
 
-	// Conditional actions: link the branches
-	for _, condition := range action.Conditions {
-		if condition.Action == "" {
-			continue
-		}
-		linkFn(IfEdge, condition.Action)
-
-		// Remove duplicate references: conditionals may duplicate the "if" action in the "on-success" step
-		action.OnSuccess = slices.DeleteFunc(action.OnSuccess, func(a map[string]any) bool { _, ok := a[condition.Action]; return ok })
-	}
-	if action.Else != "" {
-		linkFn(ElseEdge, action.Else)
-
-		// Remove duplicate references: conditionals may duplicate the "else" action in the "on-success" step
-		action.OnSuccess = slices.DeleteFunc(action.OnSuccess, func(a map[string]any) bool { _, ok := a[action.Else]; return ok })
-	}
-
 	// Loop actions and parallels: link the inner action chain
 	if len(action.Entrypoints) > 0 {
 		if err := chainActions(warns, graph, source, action.Actions, action.Entrypoints...); err != nil {
@@ -221,7 +204,25 @@ func linkActions(warns *Warnings, graph *Graph, source *Node, actions map[string
 		}
 	}
 
-	// Traverse continuation flows (on-success, on-failure, on-complete))
+	// Conditional actions: link the branches
+	if source.Meta.Type == ConditionalActionNode {
+		for _, condition := range action.Conditions {
+			if condition.Action == "" {
+				continue
+			}
+			linkFn(IfEdge, condition.Action)
+		}
+		if action.Else != "" {
+			linkFn(ElseEdge, action.Else)
+		}
+
+		// Do not follow the continuation flows for conditional actions, only the branches defined under "actions" and "else" should be followed.
+		// Continuation flows for a conditional action sometimes contain phantom or duplicate actions that cannot be reached
+		visited[source.Meta.Id] = true
+		return
+	}
+
+	// Traverse continuation flows (on-success, on-failure, on-complete)
 	for continuationType, actionMaps := range map[EdgeType][]map[string]any{
 		OnSuccessEdge:  action.OnSuccess,
 		OnFailureEdge:  action.OnFailure,
