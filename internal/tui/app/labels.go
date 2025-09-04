@@ -31,6 +31,7 @@ var NodeLabels map[graph.NodeType]string = map[graph.NodeType]string{
 	graph.RecordSearchActionNode:   "search records",
 	graph.RecordDeleteActionNode:   "delete record",
 	graph.RecordUpsertActionNode:   "upsert record",
+	graph.RecordExportActionNode:   "export records",
 	graph.EmitEventActionNode:      "emit event",
 	graph.TransformationActionNode: "transformation",
 	graph.PythonActionNode:         "python",

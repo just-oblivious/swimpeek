@@ -110,6 +110,8 @@ func createActionNode(warns *Warnings, graph *Graph, action laneclient.PlaybookA
 			recordActionType = RecordDeleteActionNode
 		case "upsert":
 			recordActionType = RecordUpsertActionNode
+		case "export":
+			recordActionType = RecordExportActionNode
 		default:
 			warns.Add(fmt.Errorf("recordAction %s has unknown recordActionType %s", actId, action.RecordActionType))
 		}

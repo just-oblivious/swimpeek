@@ -29,6 +29,7 @@ const (
 	RecordCreateActionNode   NodeType = "record_create_action"
 	RecordDeleteActionNode   NodeType = "record_delete_action"
 	RecordUpsertActionNode   NodeType = "record_upsert_action"
+	RecordExportActionNode   NodeType = "record_export_action"
 	ConnectorActionNode      NodeType = "connector_action"
 	ComponentActionNode      NodeType = "component_action"
 	EmitEventActionNode      NodeType = "emit_event_action"
