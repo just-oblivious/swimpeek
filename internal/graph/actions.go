@@ -33,6 +33,7 @@ func createActionNode(warns *Warnings, graph *Graph, action laneclient.PlaybookA
 		"http":            HTTPActionNode,
 		"conditional":     ConditionalActionNode,
 		"parallelGroup":   ParallelActionNode,
+		"notification":    NotificationActionNode,
 	}
 	if nodeType, exists := simpleTypes[action.Type]; exists {
 		return newNode(newMeta(actId, nodeType, action.Title, action.Description)), nil
@@ -133,7 +134,7 @@ func createActionNode(warns *Warnings, graph *Graph, action laneclient.PlaybookA
 		return recNode, nil
 	}
 
-	return nil, fmt.Errorf("unknown action type %s", action.Type)
+	return newNode(newMeta(actId, UnknownActionNode, action.Title, action.Description)), fmt.Errorf("unknown action type %s", action.Type)
 }
 
 // chainActions chains actions starting from the given entrypoints.
