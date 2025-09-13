@@ -23,6 +23,7 @@ const (
 	CronEventNode      NodeType = "cron_event"
 
 	// Actions
+	UnknownActionNode        NodeType = "unknown_action"
 	RecordActionNode         NodeType = "record_action"
 	RecordSearchActionNode   NodeType = "record_search_action"
 	RecordUpdateActionNode   NodeType = "record_update_action"
@@ -42,6 +43,7 @@ const (
 	ParallelActionNode       NodeType = "parallel_action"
 	ConditionalActionNode    NodeType = "condition_action"
 	HTTPActionNode           NodeType = "http_action"
+	NotificationActionNode   NodeType = "notification_action"
 )
 
 type EdgeType string
