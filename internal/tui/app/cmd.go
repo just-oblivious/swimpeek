@@ -87,9 +87,30 @@ func CmdCancelNav() tea.Msg {
 
 type ShowFlowCmd struct {
 	Node        *graph.Node
+	Highlight   *graph.Node
 	Breadcrumbs []*graph.Node
 }
 
 func CmdShowFlow(node *graph.Node, breadcrumbs ...*graph.Node) tea.Msg {
 	return ShowFlowCmd{Node: node, Breadcrumbs: breadcrumbs}
+}
+
+func CmdShowFlowWithHighlight(node, highlight *graph.Node, breadcrumbs ...*graph.Node) tea.Msg {
+	return ShowFlowCmd{Node: node, Highlight: highlight, Breadcrumbs: breadcrumbs}
+}
+
+type ShowDetailsCmd struct {
+	Node *graph.Node
+}
+
+func CmdShowDetails(node *graph.Node) tea.Msg {
+	return ShowDetailsCmd{Node: node}
+}
+
+type PushViewCmd struct {
+	View tea.Model
+}
+
+func CmdPushView(view tea.Model) tea.Msg {
+	return PushViewCmd{View: view}
 }

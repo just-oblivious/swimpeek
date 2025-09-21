@@ -2,6 +2,7 @@ package layout
 
 import (
 	"swimpeek/internal/tui/app"
+	"swimpeek/internal/tui/detailviews"
 	"swimpeek/internal/tui/flowtree"
 	"swimpeek/internal/tui/styles"
 
@@ -20,9 +21,10 @@ type mainView struct {
 	help         help.Model
 	contentFrame *app.Frame
 	flowViews    *flowtree.FlowViews
+	detailViews  *detailviews.DetailViews
 }
 
-func NewMainView(title string, windowStack []tea.Model, frame *app.Frame, flowViews *flowtree.FlowViews) tea.Model {
+func NewMainView(title string, windowStack []tea.Model, frame *app.Frame, flowViews *flowtree.FlowViews, detailViews *detailviews.DetailViews) tea.Model {
 	h := help.New()
 	h.Styles = styles.HelpStyles()
 
@@ -33,6 +35,7 @@ func NewMainView(title string, windowStack []tea.Model, frame *app.Frame, flowVi
 		help:         h,
 		contentFrame: frame,
 		flowViews:    flowViews,
+		detailViews:  detailViews,
 	}
 }
 
@@ -108,7 +111,15 @@ func (m mainView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case app.ShowFlowCmd:
-		m.windowStack = append(m.windowStack, m.flowViews.ShowFlow(msg.Node, msg.Breadcrumbs))
+		m.windowStack = append(m.windowStack, m.flowViews.ShowFlow(msg.Node, msg.Breadcrumbs, msg.Highlight))
+		return m, nil
+
+	case app.ShowDetailsCmd:
+		m.windowStack = append(m.windowStack, m.detailViews.ShowDetails(msg.Node))
+		return m, nil
+
+	case app.PushViewCmd:
+		m.windowStack = append(m.windowStack, msg.View)
 		return m, nil
 	}
 
