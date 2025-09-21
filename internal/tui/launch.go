@@ -25,7 +25,7 @@ func LaunchExplorer(laneState *lanedump.LaneState, graph *graph.Graph) error {
 	windowStack := make([]tea.Model, 1)
 	analyzer := analyzer.NewAnalyzer(laneState, graph)
 
-	tabLabels := []string{"Playbooks", "Components", "Applications"}
+	tabLabels := []string{"Playbooks", "Components", "Applications", "Triggers"}
 	windowFrame := app.NewFrame()
 	tabContentFrame := app.NewFrame()
 
@@ -33,6 +33,7 @@ func LaunchExplorer(laneState *lanedump.LaneState, graph *graph.Graph) error {
 		layout.NewListView(createListItemViews(graph.Resources.PlaybooksById, analyzer, listviews.NewPbListItem), tabContentFrame),
 		layout.NewListView(createListItemViews(graph.Resources.ComponentsById, analyzer, listviews.NewCompListItem), tabContentFrame),
 		layout.NewListView(createListItemViews(graph.Resources.AppsById, analyzer, listviews.NewSimpleListItem), tabContentFrame),
+		layout.NewListView(createListItemViews(graph.Resources.TriggersById, analyzer, listviews.NewSimpleListItem), tabContentFrame),
 	}
 
 	flowViews := flowtree.NewFlowViews(windowFrame, analyzer)
