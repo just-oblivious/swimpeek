@@ -1,4 +1,4 @@
-package main
+package swimpeek
 
 import (
 	"context"
@@ -29,7 +29,7 @@ func printUsage() {
 	fmt.Println("Run 'swimpeek <command> -help' for more information on a specific command.")
 }
 
-func main() {
+func SwimPeek() {
 	if len(os.Args) > 1 {
 		cmd := os.Args[1]
 		switch cmd {
