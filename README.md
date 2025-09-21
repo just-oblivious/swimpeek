@@ -67,7 +67,7 @@ Features to be added soon™:
 
 - Filtering in list views
 - Navigation between flow nodes and references
-- Support for triggers (view all playbook triggers)
+- Support for triggers (view all playbook triggers and track flow events)
 - Support for assets (see what assets exists and where they are used)
 - SUpport for connector actions (list available connectors and see where they are used)
 - Configuration details for individual action nodes (i.e. the input parameters)
