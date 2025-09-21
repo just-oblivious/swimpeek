@@ -33,4 +33,10 @@ var (
 	TypeLabelColor               = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#ff6ae1"}
 
 	ScrollBarColor = lipgloss.AdaptiveColor{Light: "#6C757D", Dark: "#626262"}
+
+	// Table colors
+	TableHeaderColor      = lipgloss.AdaptiveColor{Light: "#000000", Dark: "#FFFFFF"}
+	TableCellColor        = lipgloss.AdaptiveColor{Light: "#202020", Dark: "#d4e0ed"}
+	TableBorderColor      = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"}
+	TableInnerBorderColor = lipgloss.AdaptiveColor{Light: "#D3D3D3", Dark: "#3C3C3C"}
 )

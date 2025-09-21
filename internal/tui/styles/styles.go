@@ -2,6 +2,7 @@ package styles
 
 import (
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/table"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -50,3 +51,15 @@ var (
 func IndentLeft(n int) lipgloss.Style {
 	return lipgloss.NewStyle().PaddingLeft(n)
 }
+
+// Table Styles
+var (
+	TableHeaderStyle    = lipgloss.NewStyle().Bold(true).Border(lipgloss.NormalBorder(), false, false, true, false).BorderForeground(TableHeaderColor).Foreground(TableHeaderColor)
+	TableCellStyle      = lipgloss.NewStyle().Foreground(TableCellColor)
+	TableSelectionStyle = lipgloss.NewStyle().Background(HighlightColor).Foreground(LightOnDarkBGColor).Bold(true)
+	TableBorderStyle    = lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).Padding(0, 1).BorderForeground(TableBorderColor)
+	TableStyle          = table.Styles{
+		Header:   TableHeaderStyle,
+		Selected: TableSelectionStyle,
+	}
+)
