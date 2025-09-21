@@ -15,6 +15,13 @@ var NodeIcons map[graph.NodeType]string = map[graph.NodeType]string{
 	graph.ConnectorNode:   "⎋",
 	graph.WorkflowNode:    "▶",
 	graph.PlaybookNode:    "⎔",
+
+	graph.RecordCreateActionNode: "✚",
+	graph.RecordUpdateActionNode: "✎",
+	graph.RecordSearchActionNode: "☌",
+	graph.RecordDeleteActionNode: "✖",
+	graph.RecordUpsertActionNode: "𐦕",
+	graph.RecordExportActionNode: "⇩",
 }
 
 // nodeLabels provides human-readable labels for different node types.
