@@ -2,7 +2,6 @@ package analyzer
 
 import (
 	"swimpeek/internal/graph"
-	"swimpeek/internal/tui/app"
 )
 
 type ComponentCalledByResult struct {
@@ -66,7 +65,7 @@ func (a *Analyzer) ComponentCalls(compNode *graph.Node) map[*graph.Node]bool {
 	}
 
 	componentCallActions := a.FindUnique(wfNode, NewWalkOpts(Descend), graph.ComponentActionNode)
-	for _, actionNode := range app.SortSetByLabel(componentCallActions) {
+	for _, actionNode := range SortSetByLabel(componentCallActions) {
 		component := a.FindFirst(actionNode, NewWalkOpts(Ascend, WithFollowEdgeTypes(graph.CalledByEdge), WithMaxDepth(1)), graph.ComponentNode)
 		if component != nil {
 			componentCalls[component] = true
