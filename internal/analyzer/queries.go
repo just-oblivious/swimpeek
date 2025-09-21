@@ -35,6 +35,11 @@ func (a *Analyzer) GetTriggersForWorkflow(wfNode *graph.Node) map[*graph.Node]bo
 	return a.FindUnique(wfNode, NewWalkOpts(Ascend, WithFollowEdgeTypes(graph.TriggersWorkflowEdge), WithMaxDepth(1)))
 }
 
+// GetWorkflowForTrigger returns the workflow associated with the given trigger node.
+func (a *Analyzer) GetWorkflowForTrigger(triggerNode *graph.Node) *graph.Node {
+	return a.FindFirst(triggerNode, NewWalkOpts(Descend, WithFollowEdgeTypes(graph.TriggersWorkflowEdge), WithMaxDepth(1)), graph.WorkflowNode)
+}
+
 // GetEntrypointsForWorkflow returns the entrypoints of a workflow node.
 func (a *Analyzer) GetEntrypointsForWorkflow(wfNode *graph.Node) map[*graph.Node]bool {
 	return a.FindUnique(wfNode, NewWalkOpts(Descend, WithFollowEdgeTypes(graph.EntrypointEdge), WithMaxDepth(1)))
