@@ -1,11 +1,14 @@
 # SwimPeek for Swimlane Turbine
 
-SwimPeek "connects the dots" between playbooks, components, applications, and other resources in Swimlane Turbine.
+SwimPeek "connects the dots" between playbooks, components, applications, and other resources in Swimlane Turbine. This tool allows you to browse Swimlane content right from the terminal.
+
+![SwimPeek menu](img/mainview.png)
 
 With SwimPeek you can browse relationships between resources and answer questions like:
 - What playbooks are triggered when a record is created or modified in this application?
-- What playbook-actions touch records in this application?
-- Where is this component used?
+- Where is this field modified?
+- How is this component used?
+- And more...
 
 *This tool works by requesting configuration data from a Swimlane Turbine tenant and turning it into a graph-like data structure, this graph can then be navigated in a [fancy terminal UI](https://charm.land/).*
 
