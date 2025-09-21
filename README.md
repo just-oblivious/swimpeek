@@ -12,8 +12,9 @@ With SwimPeek you can browse relationships between resources and answer question
 
 ## Limitations
 
+- A cloud-hosted instance is assumed, on-prem deployments are not supported (I don't have access to one for testing);
 - Only Turbine content is supported, legacy content is ignored;
-- SwimPeek was developed with Turbine v25.2.1 in mind, there's no guarantee that this tool keeps working for newer releases;
+- SwimPeek was developed with Turbine v25.3.1 in mind, there's no guarantee that this tool keeps working for newer releases;
 - This tool was created by ~~reading the tea leaves~~ analyzing API responses, the output may not be 100% accurate.
 
 
@@ -21,9 +22,9 @@ With SwimPeek you can browse relationships between resources and answer question
 
 1.  Download and install Go (>=1.24.1) from https://go.dev/dl/
 
-1.  Run Go install to install SwimPeek:
+1.  Run Go install to download, build, and install SwimPeek:
     ```sh
-    go install github.com/just-oblivious/SwimPeek@latest
+    go install github.com/just-oblivious/swimpeek@latest
     ```
 
 1. Create a Personal Access Token for your Swimlane account ([docs](https://docs.swimlane.com/docs/introduction/customize-your-user-profile.htm))
@@ -42,7 +43,7 @@ Add the following line to your shell config to ensure that the Go bin directory 
 
 ## Usage
 
-1.  Download the contents of a Swimlane tenant to a JSON-file:
+1.  Download the contents of a Swimlane tenant to a JSON file:
     ```sh
     swimpeek dump
     ```
@@ -58,3 +59,14 @@ Run `swimpeek cmd -help` to learn more about the usage of each subcommand
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+
+## Roadmap
+
+Features to be added soon™:
+
+- Filtering in list views
+- Trigger detail views
+- Support for assets (see what assets exists and where they are used)
+- Configuration details for individual action nodes (i.e. the input parameters)
+- Global search
