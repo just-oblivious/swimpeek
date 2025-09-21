@@ -17,7 +17,7 @@ import (
 )
 
 var logger *log.Logger = config.GetLogger("swimpeek")
-var version string = "NOTSET" // set by the build system
+var version string = "0.1"
 
 func printUsage() {
 	fmt.Println("Usage: swimpeek <command> [options]")
