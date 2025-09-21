@@ -3,9 +3,9 @@
 SwimPeek "connects the dots" between playbooks, components, applications, and other resources in Swimlane Turbine.
 
 With SwimPeek you can browse relationships between resources and answer questions like:
-- What playbooks are triggered when a record is created in this application?
-- What playbook-actions modify records in this application?
-- What workflows listen for (or emit) this flow event?
+- What playbooks are triggered when a record is created or modified in this application?
+- What playbook-actions touch records in this application?
+- Where is this component used?
 
 *This tool works by requesting configuration data from a Swimlane Turbine tenant and turning it into a graph-like data structure, this graph can then be navigated in a [fancy terminal UI](https://charm.land/).*
 
@@ -29,7 +29,7 @@ With SwimPeek you can browse relationships between resources and answer question
 
 1. Create a Personal Access Token for your Swimlane account ([docs](https://docs.swimlane.com/docs/introduction/customize-your-user-profile.htm))
 
-1.  Configure Swimpeek:
+1.  Configure SwimPeek:
     ```sh
     swimpeek config
     ```
@@ -66,7 +66,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Features to be added soon™:
 
 - Filtering in list views
-- Trigger detail views
+- Navigation between flow nodes and references
+- Support for triggers (view all playbook triggers)
 - Support for assets (see what assets exists and where they are used)
+- SUpport for connector actions (list available connectors and see where they are used)
 - Configuration details for individual action nodes (i.e. the input parameters)
 - Global search
