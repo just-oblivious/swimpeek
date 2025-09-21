@@ -102,7 +102,7 @@ func (m compListItem) renderCallLocations() string {
 
 	// Format the components section
 	calledByComponents := make([]string, 0, len(m.calledBy.Components))
-	for _, comp := range app.SortSetByLabel(m.calledBy.Components) {
+	for _, comp := range analyzer.SortSetByLabel(m.calledBy.Components) {
 		calledByComponents = append(calledByComponents, comp.Meta.Label)
 	}
 
@@ -117,8 +117,8 @@ func (m compListItem) renderCallLocations() string {
 
 	// Format the playbook-workflows section
 	calledByPlaybooks := make([]string, 0, len(m.calledBy.PlaybookWorkflows))
-	for pbIdx, pb := range app.SortSetByLabel(m.calledBy.PlaybookWorkflows) {
-		wfs := app.SortSetByLabel(m.calledBy.PlaybookWorkflows[pb])
+	for pbIdx, pb := range analyzer.SortSetByLabel(m.calledBy.PlaybookWorkflows) {
+		wfs := analyzer.SortSetByLabel(m.calledBy.PlaybookWorkflows[pb])
 		wfLabels := make([]string, 0, len(wfs))
 		for wfIdx, wf := range wfs {
 			pfx := "├─"
@@ -153,7 +153,7 @@ func (m compListItem) renderCallLocations() string {
 
 	// Format the calls section
 	callLabels := make([]string, 0, len(m.calls))
-	for _, call := range app.SortSetByLabel(m.calls) {
+	for _, call := range analyzer.SortSetByLabel(m.calls) {
 		callLabels = append(callLabels, call.Meta.Label)
 	}
 

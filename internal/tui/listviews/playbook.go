@@ -39,7 +39,7 @@ func (m *pbListItem) expand() {
 
 		// Find triggers for each workflow
 		for _, wf := range pbWorkflows {
-			triggers := app.SortSetByLabel(m.analyzer.GetTriggersForWorkflow(wf))
+			triggers := analyzer.SortSetByLabel(m.analyzer.GetTriggersForWorkflow(wf))
 			m.pbWorkflows = append(m.pbWorkflows, map[*graph.Node][]*graph.Node{wf: triggers})
 		}
 	}

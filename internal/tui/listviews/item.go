@@ -16,7 +16,7 @@ type simpleListItem struct {
 	hasFocus bool
 }
 
-// NewSimpleListItem creates a basic selectable resource component for the given resource node.
+// NewSimpleListItem creates a basic selectable resource component for the given resource node. Opening the item shows the resource details.
 func NewSimpleListItem(label string, res *graph.Node, analyzer *analyzer.Analyzer, focused bool) tea.Model {
 	return simpleListItem{
 		label:    label,
@@ -37,7 +37,7 @@ func (m simpleListItem) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case app.NavCmd:
 		switch msg.NavEvent {
 		case app.NavSelect:
-			return m, func() tea.Msg { return app.CmdShowFlow(m.resource) }
+			return m, func() tea.Msg { return app.CmdShowDetails(m.resource) }
 		}
 	}
 
