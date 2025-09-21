@@ -136,7 +136,7 @@ func (a *Analyzer) ApplicationFieldModifiedBy(appNode *graph.Node, field *lanecl
 			}
 
 			if ref, isRef := fgMap["$:ref"]; isRef {
-				return false, fmt.Errorf("field property %s is a reference (%v), cannot inspect", fieldProp, ref)
+				return false, fmt.Errorf("manual inspection required - reference: %v", ref)
 			}
 
 			if _, touchesField := fgMap[field.Key]; touchesField {
