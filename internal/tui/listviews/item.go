@@ -1,0 +1,52 @@
+package listviews
+
+import (
+	"github.com/just-oblivious/swimpeek/internal/analyzer"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/tui/app"
+	"github.com/just-oblivious/swimpeek/internal/tui/styles"
+
+	tea "github.com/charmbracelet/bubbletea"
+)
+
+type simpleListItem struct {
+	label    string
+	resource *graph.Node
+	analyzer *analyzer.Analyzer
+	hasFocus bool
+}
+
+// NewSimpleListItem creates a basic selectable resource component for the given resource node. Opening the item shows the resource details.
+func NewSimpleListItem(label string, res *graph.Node, analyzer *analyzer.Analyzer, focused bool) tea.Model {
+	return simpleListItem{
+		label:    label,
+		resource: res,
+		hasFocus: focused,
+		analyzer: analyzer,
+	}
+}
+
+func (m simpleListItem) Init() tea.Cmd {
+	return nil
+}
+
+func (m simpleListItem) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case app.FocusCmd:
+		m.hasFocus = msg.Focus
+	case app.NavCmd:
+		switch msg.NavEvent {
+		case app.NavSelect:
+			return m, func() tea.Msg { return app.CmdShowDetails(m.resource) }
+		}
+	}
+
+	return m, nil
+}
+
+func (m simpleListItem) View() string {
+	if m.hasFocus {
+		return styles.CursorStyle.Render(m.label)
+	}
+	return m.label
+}
