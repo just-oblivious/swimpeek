@@ -6,9 +6,11 @@ import (
 	"swimpeek/internal/graph"
 	"swimpeek/internal/lanedump"
 	"swimpeek/internal/tui/app"
+	"swimpeek/internal/tui/detailviews"
 	"swimpeek/internal/tui/flowtree"
 	"swimpeek/internal/tui/layout"
 	"swimpeek/internal/tui/listviews"
+	"swimpeek/internal/tui/tabview"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -34,10 +36,11 @@ func LaunchExplorer(laneState *lanedump.LaneState, graph *graph.Graph) error {
 	}
 
 	flowViews := flowtree.NewFlowViews(windowFrame, analyzer)
+	detailViews := detailviews.NewDetailViews(windowFrame, analyzer)
 
-	windowStack[0] = layout.NewTabView(tabLabels, tabViews, windowFrame, tabContentFrame)
+	windowStack[0] = tabview.NewTabView(tabLabels, tabViews, windowFrame, tabContentFrame)
 	windowTitle := fmt.Sprintf("SwimPeek - %s (%s)", laneState.Tenant.Name, laneState.TimeStamp.Format(time.DateTime))
-	mainView := layout.NewMainView(windowTitle, windowStack, windowFrame, flowViews)
+	mainView := layout.NewMainView(windowTitle, windowStack, windowFrame, flowViews, detailViews)
 
 	if _, err := tea.NewProgram(mainView, tea.WithAltScreen()).Run(); err != nil {
 		return err
@@ -52,7 +55,7 @@ func flattenAndSort(nodes map[string]*graph.Node) []*graph.Node {
 		nodeList = append(nodeList, node)
 	}
 
-	app.SortNodesByLabel(nodeList)
+	analyzer.SortNodesByLabel(nodeList)
 	return nodeList
 }
 
