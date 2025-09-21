@@ -25,16 +25,20 @@ func NewFlowViews(frame *app.Frame, analyzer *analyzer.Analyzer) *FlowViews {
 }
 
 // ShowFlow returns a flow tree view for the given root node.
-func (fv *FlowViews) ShowFlow(rootNode *graph.Node, breadcrumbs []*graph.Node) tea.Model {
-	if flow, exists := fv.flows[rootNode]; exists {
-		return flow
+func (fv *FlowViews) ShowFlow(rootNode *graph.Node, breadcrumbs []*graph.Node, highlight *graph.Node) tea.Model {
+	if flowView, exists := fv.flows[rootNode]; exists {
+		flowView.highlightNode(highlight)
+		flowView.setBreadcrumbs(breadcrumbs)
+		return flowView
 	}
 	vp := viewport.New(fv.frame.Width, fv.frame.Height)
 
 	flowNode := fv.createFlow(nil, rootNode)
-	flowView := newFlowTree(fv.analyzer, fv.frame, flowNode, breadcrumbs, &vp)
+	flowView := newFlowTree(fv.analyzer, fv.frame, flowNode, &vp)
 
 	fv.flows[rootNode] = flowView
+	flowView.highlightNode(highlight)
+	flowView.setBreadcrumbs(breadcrumbs)
 	return flowView
 }
 

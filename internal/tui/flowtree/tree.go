@@ -26,14 +26,13 @@ type flowTree struct {
 }
 
 // newFlowTree creates a new flow tree for the given root flow node.
-func newFlowTree(analyzer *analyzer.Analyzer, frame *app.Frame, flowNode *flowNode, breadcrumbs []*graph.Node, vp *viewport.Model) *flowTree {
+func newFlowTree(analyzer *analyzer.Analyzer, frame *app.Frame, flowNode *flowNode, vp *viewport.Model) *flowTree {
 	flowNode.setFocus(true)
 	visible, yOffsets := getVisibleNodes(flowNode)
 	return &flowTree{
 		analyzer:     analyzer,
 		frame:        frame,
 		flowNode:     flowNode,
-		breadcrumbs:  breadcrumbs,
 		viewport:     vp,
 		cursorMode:   true,
 		visibleNodes: visible,
@@ -74,6 +73,31 @@ func (m *flowTree) cursorStep(step int) {
 	}
 
 	m.scrollToSelection(m.yOffsets[m.selectionIdx])
+}
+
+// highlightNode highlights and scrolls to the given node if it is currently visible in the flow tree.
+func (m *flowTree) highlightNode(node *graph.Node) {
+	if node == nil || m.selectedNode.node == node {
+		return
+	}
+
+	// Find the node in the visible nodes
+	// TODO: auto-expand nodes until the target node becomes visible
+	for idx, flowNode := range m.visibleNodes {
+		if flowNode.node == node {
+			m.selectedNode.setFocus(false)
+			flowNode.setFocus(true)
+			m.selectedNode = flowNode
+			m.selectionIdx = idx
+			m.scrollToSelection(m.yOffsets[m.selectionIdx])
+			return
+		}
+	}
+}
+
+// setBreadcrumbs updates the breadcrumb trail for the current flow.
+func (m *flowTree) setBreadcrumbs(breadcrumbs []*graph.Node) {
+	m.breadcrumbs = breadcrumbs
 }
 
 // scrollToSelection scrolls the viewport to ensure the selected node remains visible given its Y-offset in the rendered tree.
@@ -154,7 +178,7 @@ func (m *flowTree) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m flowTree) View() string {
-	modeHint := "↑↓ SCROLL" // arrow up down symbol
+	modeHint := "↑↓ SCROLL"
 	if m.cursorMode {
 		modeHint = "↑↓ SELECT"
 	}
