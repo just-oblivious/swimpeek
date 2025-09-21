@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"swimpeek/internal/config"
-	"swimpeek/pkg/laneclient"
 	"time"
+
+	"github.com/just-oblivious/swimpeek/internal/config"
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 
 	"github.com/charmbracelet/log"
 

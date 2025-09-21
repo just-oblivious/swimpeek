@@ -1,7 +1,7 @@
 package analyzer
 
 import (
-	"swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/graph"
 )
 
 type ComponentCalledByResult struct {

@@ -1,8 +1,8 @@
 package analyzer
 
 import (
-	"swimpeek/internal/graph"
-	"swimpeek/pkg/laneclient"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 )
 
 // GetWorkflowResource returns the workflow resource associated with the given workflow node, if it exists.

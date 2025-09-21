@@ -2,7 +2,8 @@ package analyzer
 
 import (
 	"slices"
-	"swimpeek/internal/graph"
+
+	"github.com/just-oblivious/swimpeek/internal/graph"
 )
 
 type WalkDirection int

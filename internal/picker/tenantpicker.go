@@ -4,8 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"slices"
-	"swimpeek/pkg/laneclient"
 	"time"
+
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 
 	"github.com/charmbracelet/huh"
 )

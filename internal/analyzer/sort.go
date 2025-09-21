@@ -3,7 +3,8 @@ package analyzer
 import (
 	"slices"
 	"strings"
-	"swimpeek/internal/graph"
+
+	"github.com/just-oblivious/swimpeek/internal/graph"
 )
 
 // SortNodesByLabel sorts a slice of nodes in place by their label.

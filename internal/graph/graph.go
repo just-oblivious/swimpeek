@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"swimpeek/internal/lanedump"
+	"github.com/just-oblivious/swimpeek/internal/lanedump"
 )
 
 type Graph struct {

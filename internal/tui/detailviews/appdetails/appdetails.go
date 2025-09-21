@@ -1,11 +1,11 @@
 package appdetails
 
 import (
-	"swimpeek/internal/analyzer"
-	"swimpeek/internal/graph"
-	"swimpeek/internal/tui/app"
-	"swimpeek/internal/tui/tabview"
-	"swimpeek/pkg/laneclient"
+	"github.com/just-oblivious/swimpeek/internal/analyzer"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/tui/app"
+	"github.com/just-oblivious/swimpeek/internal/tui/tabview"
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"

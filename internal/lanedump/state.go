@@ -1,8 +1,9 @@
 package lanedump
 
 import (
-	"swimpeek/pkg/laneclient"
 	"time"
+
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 )
 
 // LaneState holds the state of the SwimLane tenant.

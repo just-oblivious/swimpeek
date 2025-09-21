@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"swimpeek/pkg/laneclient"
+
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 )
 
 // createActionNodes creates nodes for workflow actions.

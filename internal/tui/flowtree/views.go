@@ -1,9 +1,9 @@
 package flowtree
 
 import (
-	"swimpeek/internal/analyzer"
-	"swimpeek/internal/graph"
-	"swimpeek/internal/tui/app"
+	"github.com/just-oblivious/swimpeek/internal/analyzer"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/tui/app"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"

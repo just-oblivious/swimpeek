@@ -1,6 +1,6 @@
 package app
 
-import "swimpeek/internal/graph"
+import "github.com/just-oblivious/swimpeek/internal/graph"
 
 // nodeIcons provides visual symbols for different node types.
 var NodeIcons map[graph.NodeType]string = map[graph.NodeType]string{

@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"swimpeek/internal/config"
-	"swimpeek/internal/graph"
-	"swimpeek/internal/lanedump"
-	"swimpeek/internal/picker"
-	"swimpeek/internal/tui"
-	"swimpeek/pkg/laneclient"
+
+	"github.com/just-oblivious/swimpeek/internal/config"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/lanedump"
+	"github.com/just-oblivious/swimpeek/internal/picker"
+	"github.com/just-oblivious/swimpeek/internal/tui"
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 
 	"github.com/charmbracelet/log"
 )

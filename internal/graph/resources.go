@@ -2,7 +2,8 @@ package graph
 
 import (
 	"fmt"
-	"swimpeek/internal/lanedump"
+
+	"github.com/just-oblivious/swimpeek/internal/lanedump"
 )
 
 type NodeType string

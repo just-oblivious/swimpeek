@@ -1,7 +1,7 @@
 package app
 
 import (
-	"swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/graph"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

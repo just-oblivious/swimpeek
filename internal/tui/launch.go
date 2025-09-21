@@ -2,16 +2,17 @@ package tui
 
 import (
 	"fmt"
-	"swimpeek/internal/analyzer"
-	"swimpeek/internal/graph"
-	"swimpeek/internal/lanedump"
-	"swimpeek/internal/tui/app"
-	"swimpeek/internal/tui/detailviews"
-	"swimpeek/internal/tui/flowtree"
-	"swimpeek/internal/tui/layout"
-	"swimpeek/internal/tui/listviews"
-	"swimpeek/internal/tui/tabview"
 	"time"
+
+	"github.com/just-oblivious/swimpeek/internal/analyzer"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/lanedump"
+	"github.com/just-oblivious/swimpeek/internal/tui/app"
+	"github.com/just-oblivious/swimpeek/internal/tui/detailviews"
+	"github.com/just-oblivious/swimpeek/internal/tui/flowtree"
+	"github.com/just-oblivious/swimpeek/internal/tui/layout"
+	"github.com/just-oblivious/swimpeek/internal/tui/listviews"
+	"github.com/just-oblivious/swimpeek/internal/tui/tabview"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

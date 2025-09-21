@@ -1,8 +1,8 @@
 package layout
 
 import (
-	"swimpeek/internal/tui/app"
-	"swimpeek/internal/tui/styles"
+	"github.com/just-oblivious/swimpeek/internal/tui/app"
+	"github.com/just-oblivious/swimpeek/internal/tui/styles"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"

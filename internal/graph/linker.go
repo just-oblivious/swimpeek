@@ -3,8 +3,9 @@ package graph
 import (
 	"fmt"
 	"strings"
-	"swimpeek/internal/lanedump"
-	"swimpeek/pkg/laneclient"
+
+	"github.com/just-oblivious/swimpeek/internal/lanedump"
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 )
 
 type Warnings struct {

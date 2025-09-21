@@ -1,7 +1,7 @@
 package analyzer
 
 import (
-	"swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/graph"
 )
 
 // GetPlaybookForWorkflow returns the playbook associated with the given workflow node

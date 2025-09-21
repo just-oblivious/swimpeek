@@ -2,7 +2,8 @@ package styles
 
 import (
 	"strings"
-	"swimpeek/internal/tui/app"
+
+	"github.com/just-oblivious/swimpeek/internal/tui/app"
 
 	"github.com/charmbracelet/lipgloss"
 )

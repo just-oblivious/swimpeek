@@ -1,8 +1,8 @@
 package analyzer
 
 import (
-	"swimpeek/internal/graph"
-	"swimpeek/internal/lanedump"
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/internal/lanedump"
 )
 
 type Analyzer struct {

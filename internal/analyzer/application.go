@@ -2,8 +2,9 @@ package analyzer
 
 import (
 	"fmt"
-	"swimpeek/internal/graph"
-	"swimpeek/pkg/laneclient"
+
+	"github.com/just-oblivious/swimpeek/internal/graph"
+	"github.com/just-oblivious/swimpeek/pkg/laneclient"
 )
 
 type TriggerAction struct {

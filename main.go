@@ -1,6 +1,6 @@
 package main
 
-import "swimpeek/cmd/swimpeek"
+import "github.com/just-oblivious/swimpeek/cmd/swimpeek"
 
 func main() {
 	swimpeek.SwimPeek()

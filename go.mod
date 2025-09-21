@@ -1,4 +1,4 @@
-module swimpeek
+module github.com/just-oblivious/swimpeek
 
 go 1.24.1
 
