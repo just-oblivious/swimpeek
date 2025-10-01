@@ -20,7 +20,7 @@ func initPrompts(cfg *Config) error {
 				Placeholder("us1").
 				Description("To find the region, visit any Swimlane tenant and look at the domain name.").
 				Validate(func(s string) error {
-					if !regexp.MustCompile(`^[a-z]{2}\d$`).MatchString(s) {
+					if !regexp.MustCompile(`(?i)^[a-z0-9]{3}$`).MatchString(s) {
 						return errors.New("please provide a valid Swimlane region (e.g., us1, de1)")
 					}
 					return nil
