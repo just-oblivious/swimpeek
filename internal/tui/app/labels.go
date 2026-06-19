@@ -52,6 +52,7 @@ var NodeLabels map[graph.NodeType]string = map[graph.NodeType]string{
 	graph.RecordEventNode:          "record event",
 	graph.CronEventNode:            "cron event",
 	graph.WebhookNode:              "incoming webhook",
+	graph.NotificationActionNode:   "notification",
 	graph.HeroAIActionNode:         "hero ai",
 	graph.CSVGetRowsActionNode:     "csv get rows",
 }
