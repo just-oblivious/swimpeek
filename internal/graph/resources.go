@@ -45,6 +45,8 @@ const (
 	ConditionalActionNode    NodeType = "condition_action"
 	HTTPActionNode           NodeType = "http_action"
 	NotificationActionNode   NodeType = "notification_action"
+	HeroAIActionNode         NodeType = "heroai_action"
+	CSVGetRowsActionNode     NodeType = "csv_get_rows_action"
 )
 
 type EdgeType string

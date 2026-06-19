@@ -16,6 +16,9 @@ var NodeIcons map[graph.NodeType]string = map[graph.NodeType]string{
 	graph.WorkflowNode:    "▶",
 	graph.PlaybookNode:    "⎔",
 
+	graph.HeroAIActionNode:     "♾",
+	graph.CSVGetRowsActionNode: "☷",
+
 	graph.RecordCreateActionNode: "✚",
 	graph.RecordUpdateActionNode: "✎",
 	graph.RecordSearchActionNode: "☌",
@@ -49,6 +52,8 @@ var NodeLabels map[graph.NodeType]string = map[graph.NodeType]string{
 	graph.RecordEventNode:          "record event",
 	graph.CronEventNode:            "cron event",
 	graph.WebhookNode:              "incoming webhook",
+	graph.HeroAIActionNode:         "hero ai",
+	graph.CSVGetRowsActionNode:     "csv get rows",
 }
 
 // edgeLabels provides human-readable labels for different edge types.
