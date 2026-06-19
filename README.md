@@ -30,7 +30,7 @@ With SwimPeek you can browse relationships between resources and answer question
     go install github.com/just-oblivious/swimpeek@latest
     ```
 
-1. Create a Personal Access Token for your Swimlane account ([docs](https://docs.swimlane.com/docs/introduction/customize-your-user-profile.htm))
+1. Create a Personal Access Token for your Swimlane account ([docs](https://docs.swimlane.com/customize-your-user-profile#creating-a-personal-access-token))
 
 1.  Configure SwimPeek:
     ```sh
@@ -62,16 +62,3 @@ Run `swimpeek cmd -help` to learn more about the usage of each subcommand
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-
-## Roadmap
-
-Features to be added soon™:
-
-- Filtering in list views
-- Navigation between flow nodes and references
-- Support for triggers (view all playbook triggers and track flow events)
-- Support for assets (see what assets exists and where they are used)
-- SUpport for connector actions (list available connectors and see where they are used)
-- Configuration details for individual action nodes (i.e. the input parameters)
-- Global search
