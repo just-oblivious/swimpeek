@@ -133,6 +133,12 @@ func createActionNode(warns *Warnings, graph *Graph, action laneclient.PlaybookA
 		}
 		newEdge(appNode, recNode, AccessedByEdge, nil)
 		return recNode, nil
+
+	case "heroAI":
+		return newNode(newMeta(actId, HeroAIActionNode, action.Title, action.Description)), nil
+
+	case "fileUtilities":
+		return newNode(newMeta(actId, CSVGetRowsActionNode, action.Title, action.Description)), nil
 	}
 
 	return newNode(newMeta(actId, UnknownActionNode, action.Title, action.Description)), fmt.Errorf("unknown action type %s", action.Type)
