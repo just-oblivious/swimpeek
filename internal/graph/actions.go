@@ -62,7 +62,7 @@ func createActionNode(warns *Warnings, graph *Graph, action laneclient.PlaybookA
 		sensNode, exists := graph.Resources.TriggersById[sensorName]
 		if !exists {
 			warns.Add(fmt.Errorf("emitEvent action %s references unknown sensor %s", actId, sensorName))
-			return sensNode, nil
+			return emitNode, nil
 		}
 		newEdge(sensNode, emitNode, EmittedByEdge, nil)
 		return emitNode, nil
